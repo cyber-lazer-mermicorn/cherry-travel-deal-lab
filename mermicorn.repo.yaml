@@ -1,34 +1,33 @@
 schema_version: "1.0"
+
 id: cherry-travel-deal-lab
 display_name: Cherry Travel Deal Lab
-lane: commerce-service
 owner: cherry
-status: foundation
+lane: commerce-service
 visibility: public
+status: foundation
+
 purpose:
   problem: Convert deal-spotting talent into professional, evidence-based travel recommendations.
   audience:
     - potential clients
     - travel employers
     - portfolio reviewers
-capabilities:
-  - deal.discover
-  - deal.compare
-  - deal.verify
-  - itinerary.package
-  - recommendation.compose
+
 shared_services:
   boot: mermicorn-mega-boot
   memory: mermicorn-memory
   token_efficiency: mermicorn-token-saver
   commerce: mermicorn-commerce-ai
-data_policy:
+
+privacy:
   public:
     - templates
     - sanitized_case_studies
   private:
     - client_data
     - credentials
+
 first_proof:
   artifact: honolulu-origin-trip-comparison
   status: planned
