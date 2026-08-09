@@ -47,7 +47,7 @@ class SkyscannerIntegration:
     """Skyscanner flight search integration."""
     
     def __init__(self, api_key: str = ""):
-        self.api_key = api_key
+        self.api_key = api_key or os.environ.get("SKYSCANNER_API_KEY", "")
         self.flights: list[FlightDeal] = []
     
     def search_flights(self, origin: str, destination: str,
