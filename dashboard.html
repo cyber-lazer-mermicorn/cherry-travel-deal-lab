@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Deal Lab — Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background: #0a0a0f; color: #e0e0e0; font-family: 'Inter', sans-serif; }
+        .green { color: #00ff88; text-shadow: 0 0 10px #00ff88; }
+        .card { background: #12121a; border: 1px solid #2a2a3a; border-radius: 12px; }
+    </style>
+</head>
+<body class="min-h-screen p-6">
+    <div class="max-w-6xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+            <div>
+                <h1 class="text-3xl font-bold green">Travel Deal Lab</h1>
+                <p class="text-gray-400">Search → Score → Alert → Book</p>
+            </div>
+            <div>
+                <input id="api-key" type="password" placeholder="API Key" class="bg-gray-800 border border-gray-600 rounded px-3 py-2 text-sm mr-2">
+                <button onclick="loadDashboard()" class="bg-green-600 hover:bg-green-700 rounded px-4 py-2 text-sm">Connect</button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-4 mb-8">
+            <div class="card p-4 text-center"><div class="text-2xl font-bold text-green-400" id="stat-deals">0</div><div class="text-gray-400 text-sm">Deals</div></div>
+            <div class="card p-4 text-center"><div class="text-2xl font-bold text-cyan-400" id="stat-destinations">0</div><div class="text-gray-400 text-sm">Destinations</div></div>
+            <div class="card p-4 text-center"><div class="text-2xl font-bold text-yellow-400" id="stat-alerts">0</div><div class="text-gray-400 text-sm">Alerts</div></div>
+            <div class="card p-4 text-center"><div class="text-2xl font-bold text-red-400" id="stat-saved">$0</div><div class="text-gray-400 text-sm">Saved</div></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-6">
+            <div class="card p-6">
+                <h2 class="text-xl font-bold mb-4">Add Deal</h2>
+                <input id="deal-dest" type="text" placeholder="Destination" class="w-full bg-gray-800 border border-gray-600 rounded px-3 py-2 mb-3">
+                <div class="grid grid-cols-3 gap-3 mb-3">
+                    <input id="deal-price" type="number" placeholder="Price" class="bg-gray-800 border border-gray-600 rounded px-3 py-2">
+                    <input id="deal-dates" type="text" placeholder="Aug 15-22" class="bg-gray-800 border border-gray-600 rounded px-3 py-2">
+                    <input id="deal-source" type="text" placeholder="Source" class="bg-gray-800 border border-gray-600 rounded px-3 py-2">
+                </div>
+                <button onclick="addDeal()" class="bg-green-600 hover:bg-green-700 rounded px-6 py-2 w-full">Add Deal</button>
+                <div id="deals-list" class="mt-4 space-y-2 max-h-64 overflow-auto"></div>
+            </div>
+
+            <div class="card p-6">
+                <h2 class="text-xl font-bold mb-4">Price Alerts</h2>
+                <div class="bg-gray-800 p-4 rounded mb-4">
+                    <input id="alert-dest" type="text" placeholder="Destination" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 mb-2">
+                    <input id="alert-price" type="number" placeholder="Target price" class="w-full bg-gray-900 border border-gray-600 rounded px-3 py-2 mb-2">
+                    <button onclick="setAlert()" class="bg-yellow-600 rounded px-4 py-2 text-sm w-full">Set Alert</button>
+                </div>
+                <div id="alerts-list" class="space-y-2"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let apiKey = '';
+        let alerts = [];
+        
+        async function api(method, path, body = null) {
+            const opts = { method, headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey } };
+            if (body) opts.body = JSON.stringify(body);
+            const res = await fetch('/api' + path, opts);
+            return res.json();
+        }
+        
+        async function loadDashboard() {
+            apiKey = document.getElementById('api-key').value;
+            const data = await api('GET', '/deals');
+            const deals = data.deals || [];
+            document.getElementById('stat-deals').textContent = deals.length;
+            const dests = new Set(deals.map(d => d.destination));
+            document.getElementById('stat-destinations').textContent = dests.size;
+            document.getElementById('deals-list').innerHTML = deals.map(d => 
+                `<div class="bg-gray-800 p-3 rounded flex justify-between"><span>${d.destination} (${d.dates})</span><span class="text-green-400">$${d.price}</span></div>`
+            ).join('');
+        }
+        
+        async function addDeal() {
+            const destination = document.getElementById('deal-dest').value;
+            const price = parseFloat(document.getElementById('deal-price').value);
+            const dates = document.getElementById('deal-dates').value;
+            const source = document.getElementById('deal-source').value;
+            await api('POST', '/deals', { destination, price, dates, source });
+            loadDashboard();
+        }
+        
+        function setAlert() {
+            const dest = document.getElementById('alert-dest').value;
+            const price = document.getElementById('alert-price').value;
+            alerts.push({ destination: dest, target: price });
+            document.getElementById('stat-alerts').textContent = alerts.length;
+            document.getElementById('alerts-list').innerHTML = alerts.map(a => 
+                `<div class="bg-gray-800 p-3 rounded flex justify-between"><span>${a.destination}</span><span class="text-yellow-400">< $${a.target}</span></div>`
+            ).join('');
+        }
+    </script>
+</body>
+</html>
