@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cherry Travel Deal Lab</title>
+    <meta name="description" content="Systematic travel deal research, comparison, and portfolio-ready recommendations">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #00B4D8;
+            --bg: #0a0a0f;
+            --surface: #12121a;
+            --card: #1a1a2e;
+            --muted: #8B8B9E;
+            --white: #fff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--white); line-height: 1.6; }
+
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(10,10,15,0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .logo { font-weight: 900; font-size: 1.25rem; }
+        .nav-right { color: var(--muted); font-size: 0.8rem; }
+
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+            padding: 6rem 2rem; position: relative;
+        }
+        .hero::before {
+            content: ''; position: absolute; width: 500px; height: 500px;
+            background: radial-gradient(circle, #00B4D822, transparent 70%);
+            top: -150px; right: -150px; pointer-events: none;
+        }
+        .badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1rem; background: #00B4D815; border: 1px solid #00B4D833;
+            border-radius: 999px; font-size: 0.75rem; color: #00B4D8; margin-bottom: 1.5rem;
+        }
+        .hero h1 { font-size: clamp(2.5rem, 7vw, 5rem); font-weight: 900; line-height: 1; letter-spacing: -0.04em; margin-bottom: 1rem; }
+        .hero h1 span { color: #00B4D8; }
+        .hero p { color: var(--muted); font-size: 1.125rem; max-width: 500px; margin-bottom: 2rem; }
+
+        .btn { padding: 1rem 2rem; border-radius: 999px; font-weight: 600; font-size: 0.875rem; text-decoration: none; border: none; cursor: pointer; transition: all 0.2s; display: inline-block; }
+        .btn-primary { background: #00B4D8; color: #0a0a0f; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px #00B4D844; }
+        .btn-ghost { background: transparent; border: 1px solid rgba(255,255,255,0.15); color: var(--white); }
+        .btn-ghost:hover { border-color: #00B4D8; color: #00B4D8; }
+
+        .section { padding: 6rem 2rem; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-size: 2rem; font-weight: 900; letter-spacing: -0.03em; margin-bottom: 0.5rem; }
+        .section-header p { color: var(--muted); }
+
+        .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+        .feature {
+            background: var(--card); padding: 2rem; border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06); text-align: center;
+            transition: all 0.3s;
+        }
+        .feature:hover { border-color: #00B4D844; transform: translateY(-4px); box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .feature-icon { font-size: 2rem; margin-bottom: 1rem; }
+        .feature h3 { font-size: 1.125rem; margin-bottom: 0.5rem; }
+        .feature p { color: var(--muted); font-size: 0.875rem; }
+
+        .items { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
+        .item {
+            background: var(--card); padding: 1.5rem; border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+            display: flex; justify-content: space-between; align-items: center;
+            transition: all 0.3s;
+        }
+        .item:hover { border-color: #00B4D844; transform: translateY(-2px); }
+        .item-name { font-weight: 600; margin-bottom: 0.25rem; }
+        .item-meta { color: var(--muted); font-size: 0.875rem; }
+        .item-price { font-weight: 700; color: #00B4D8; font-size: 1.125rem; }
+        .tag { padding: 0.25rem 0.5rem; background: #00B4D818; border-radius: 4px; font-size: 0.65rem; color: #00B4D8; margin-left: 0.5rem; font-weight: 600; letter-spacing: 0.05em; }
+
+        .stats { display: flex; justify-content: center; gap: 4rem; padding: 3rem 2rem; max-width: 800px; margin: 0 auto; }
+        .stat { text-align: center; }
+        .stat-value { font-size: 2rem; font-weight: 900; color: #00B4D8; }
+        .stat-label { color: var(--muted); font-size: 0.8rem; margin-top: 0.25rem; }
+
+        footer { padding: 4rem 2rem; border-top: 1px solid rgba(255,255,255,0.06); text-align: center; }
+        footer p { color: var(--muted); font-size: 0.875rem; }
+        footer .brand { color: #00B4D8; font-weight: 700; }
+
+        @media (max-width: 768px) {
+            .stats { gap: 2rem; }
+            .features, .items { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">✈️ Cherry Travel Deal Lab</div>
+        <div class="nav-right">Built with 💜 by Cherry</div>
+    </nav>
+
+    <section class="hero">
+        <div class="badge">✈️ Live & Ready</div>
+        <h1><span>Cherry Travel Deal Lab</span></h1>
+        <p>Systematic travel deal research, comparison, and portfolio-ready recommendations</p>
+        <div style="display:flex;gap:1rem;">
+            <a href="#features" class="btn btn-primary">Explore</a>
+            <a href="#items" class="btn btn-ghost">See Latest</a>
+        </div>
+    </section>
+
+    <section class="section" id="features">
+        <div class="section-header">
+            <h2>Capabilities</h2>
+            <p>Built for performance</p>
+        </div>
+        <div class="features">
+            <div class="feature"><div class="feature-icon">🔍</div><h3>Deal Scanner</h3><p>Automated monitoring of flight and hotel prices</p></div>
+            <div class="feature"><div class="feature-icon">📊</div><h3>Price Analytics</h3><p>Historical price data and trend analysis</p></div>
+            <div class="feature"><div class="feature-icon">🎯</div><h3>Smart Alerts</h3><p>Notify when prices drop below your threshold</p></div>
+            <div class="feature"><div class="feature-icon">📋</div><h3>Travel Portfolio</h3><p>Organized collection of verified deals</p></div>
+        </div>
+    </section>
+
+    <section class="section" id="items">
+        <div class="section-header">
+            <h2>Latest Activity</h2>
+            <p>Recent results</p>
+        </div>
+        <div class="items">
+            <div class="item"><div><div class="item-name">Hawaii<span class="tag">HOT</span></div><div class="item-meta">Aug 15-22</div></div><div class="item-price">$299</div></div>
+            <div class="item"><div><div class="item-name">Tokyo<span class="tag">DEAL</span></div><div class="item-meta">Sep 1-8</div></div><div class="item-price">$489</div></div>
+            <div class="item"><div><div class="item-name">Bali<span class="tag">NEW</span></div><div class="item-meta">Oct 5-12</div></div><div class="item-price">$399</div></div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="stats">
+            <div class="stat"><div class="stat-value">4</div><div class="stat-label">Capabilities</div></div>
+            <div class="stat"><div class="stat-value">3</div><div class="stat-label">Items Tracked</div></div>
+            <div class="stat"><div class="stat-value">99%</div><div class="stat-label">Uptime</div></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 <span class="brand">Cherry Travel Deal Lab</span>. All rights reserved.</p>
+    </footer>
+</body>
+</html>
