@@ -4,24 +4,20 @@ import random
 from .scorer import Deal
 
 class DealSearcher:
-    def search(self, destination: str, budget: float = 0, origin: str = "HNL") -> list[Deal]:
+    def search(self, destination: str, budget: float = 0, origin: str = "HNL") -> list:
         origin = (origin or "HNL").upper()
-        deals: list[Deal] = []
+        deals = []
         deals.extend(self.search_flights(destination, budget, origin, 1))
         deals.extend(self.search_hotels(destination, budget, 4, 1))
         return deals
 
-    def search_flights(self, destination: str, budget: float, origin: str, travelers: int) -> list[Deal]:
-        deals: list[Deal] = []
-        deals.extend(self._samples_flights(destination, budget, origin, travelers))
-        return deals
+    def search_flights(self, destination: str, budget: float, origin: str, travelers: int) -> list:
+        return self._samples_flights(destination, budget, origin, travelers)
 
-    def search_hotels(self, destination: str, budget: float, nights: int, travelers: int) -> list[Deal]:
-        deals: list[Deal] = []
-        deals.extend(self._samples_hotels(destination, budget, nights, travelers))
-        return deals
+    def search_hotels(self, destination: str, budget: float, nights: int, travelers: int) -> list:
+        return self._samples_hotels(destination, budget, nights, travelers)
 
-    def _samples_flights(self, destination: str, budget: float, origin: str, travelers: int) -> list[Deal]:
+    def _samples_flights(self, destination: str, budget: float, origin: str, travelers: int) -> list:
         dest = (destination or "TYO").upper()[:3]
         base = 450 if dest in {"LAX", "SFO", "SEA"} else 780 if dest in {"TYO", "NRT", "HND"} else 620
         if budget and budget < 900:
@@ -34,18 +30,20 @@ class DealSearcher:
             rack = round(price * random.uniform(1.08, 1.35), 2)
             out.append(Deal(
                 id=f"flt-{dest}-{i}",
-                title=f"{carrier} {origin}→{dest}",
+                source=carrier,
+                title=f"{carrier} {origin}\u2192{dest}",
                 price=price,
                 original_price=rack,
-                source=carrier,
                 kind="flight",
                 dates="flexible sample",
-                url="",
-                meta={"origin": origin, "destination": dest, "travelers": travelers},
+                destination=dest,
+                origin=origin,
+                travelers=travelers,
+                meta={"per_person": unit},
             ))
         return out
 
-    def _samples_hotels(self, destination: str, budget: float, nights: int, travelers: int) -> list[Deal]:
+    def _samples_hotels(self, destination: str, budget: float, nights: int, travelers: int) -> list:
         dest = (destination or "TYO").upper()[:3]
         nights = max(1, nights)
         nightly = 95 if dest in {"LAX", "SFO"} else 140 if dest in {"TYO", "NRT", "HND"} else 110
@@ -57,13 +55,15 @@ class DealSearcher:
             rack = round(price * random.uniform(1.1, 1.4), 2)
             out.append(Deal(
                 id=f"htl-{dest}-{i}",
+                source="sample-hotel",
                 title=f"{name} ({dest})",
                 price=price,
                 original_price=rack,
-                source="sample-hotel",
                 kind="hotel",
                 dates=f"{nights} nights",
-                url="",
-                meta={"nights": nights, "travelers": travelers, "destination": dest},
+                destination=dest,
+                origin="HNL",
+                nights=nights,
+                travelers=travelers,
             ))
         return out
