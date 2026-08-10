@@ -1,26 +1,35 @@
 # Status
 
-**State:** VERTICAL_SLICE (merged engine on main)  
-**Last updated:** 2026-08-10  
-**HEAD:** `a7090c3`
+**State:** RUNTIME_OBSERVED  
+**Version:** 2.2.1  
+**Live:** https://ai-deal-finder.vercel.app  
+**Last updated:** 2026-08-10
+
+## What this is
+
+Honolulu-origin **total-cost trip planner** with freemium limits.
+Public URL still named `ai-deal-finder` on Vercel; product identity is Cherry Travel Deal Lab.
 
 ## Gates
 
 | Gate | State |
 |------|--------|
-| IDENTITY_RESOLVED | PASS |
-| PROBLEM_VERIFIED | PASS |
-| TARGET_CONTRACT_FROZEN | PASS |
-| NOVELTY_AND_LINEAGE | PASS — ai-deal-finder is donor |
-| VERTICAL_SLICE_ALIVE | PASS local |
-| DETERMINISTIC_PROOF | PASS local |
-| RUNTIME_OBSERVED | **OPEN** |
-| EXCELLENCE | **OPEN** |
+| IDENTITY | PASS |
+| PROBLEM | PASS |
+| TARGET CONTRACT | PASS |
+| VERTICAL SLICE | PASS |
+| LOCAL PROOF | PASS |
+| RUNTIME_OBSERVED | **PASS** (health, plan, search, pricing) |
+| PAYMENT / CASH | OPEN |
+| EXCELLENCE (full contract) | CLOSE — runtime yes; adversarial + payment still open |
 
-## Merge complete on GitHub
+## Verified live
 
-Engine from `ai-deal-finder` is on this repo: `main.py`, `api/`, `src/{planner,scorer,searcher,users}.py`, `vercel.json`.
+- GET /api/health → 200
+- POST /api/plan HNL→TYO → packages + money
+- POST /api/search → deals + scores
+- GET /api/pricing → Free / Pro / Premium
 
-## Blocker for excellence
+## Non-claims
 
-Git→Vercel must deploy this repo and return live health + plan. Then RUNTIME_OBSERVED flips and excellence can be claimed under the contract.
+Sample inventory. No ticket booking. Not an agency.

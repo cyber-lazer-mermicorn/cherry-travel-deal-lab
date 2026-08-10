@@ -1,24 +1,23 @@
 {
   "repository": "cyber-lazer-mermicorn/cherry-travel-deal-lab",
-  "source_sha": "a7090c3f481679d2d6de9d8dd0ef70527b99120a",
-  "proof_id": "merge-vertical-slice-2026-08-10",
-  "environment": {"local": true, "vercel_production": false},
+  "source_sha": "19b88829be0ea1d80d500ecee8912e23ab846607",
+  "proof_id": "runtime-2026-08-10-v2.2.1",
+  "environment": {
+    "local": true,
+    "vercel_production": true,
+    "url": "https://ai-deal-finder.vercel.app"
+  },
   "tests": [
-    {"name": "api_health", "result": "PASS", "detail": "local TestClient 200"},
-    {"name": "api_plan_HNL_TYO_2500", "result": "PASS", "detail": "packages + money summary"}
+    {"name": "api_health", "result": "PASS"},
+    {"name": "api_plan_HNL_TYO_2500", "result": "PASS"},
+    {"name": "api_search_LAX", "result": "PASS"},
+    {"name": "api_pricing", "result": "PASS"}
   ],
-  "adversarial_tests": [],
-  "runtime": {"observed": false, "url": null},
-  "result": "PARTIAL",
+  "result": "PASS_RUNTIME",
   "limitations": [
-    "Production runtime not yet observed on Vercel",
-    "Sample inventory — not live OTA rates",
-    "Payment capture not wired"
+    "Sample inventory not live OTA rates",
+    "No payment processor",
+    "Vercel project slug still ai-deal-finder"
   ],
-  "timestamp": "2026-08-10T03:40:00Z",
-  "merge": {
-    "donor": "cyber-lazer-mermicorn/ai-deal-finder",
-    "donor_sha": "01fe10f1ca3d9fb76d9ebca7b7b03e5324f83bdb",
-    "canonical_product": "cherry-travel-deal-lab"
-  }
+  "timestamp": "2026-08-10T03:55:00Z"
 }
