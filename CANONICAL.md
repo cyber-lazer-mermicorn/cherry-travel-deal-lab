@@ -1,23 +1,9 @@
-# Canonical Identity
+# Canonical
 
-## Repository
+**Role:** CANONICAL_SYSTEM for Honolulu-origin travel deal product.
 
-- **Name**: cherry-travel-deal-lab
-- **Owner**: Cherry | Cyber Lazer Mermicorn
-- **Family**: mermicorn-ventures
-- **Lane**: commerce
-- **Role**: SPECIALIST_COMPONENT
+**Donor:** `ai-deal-finder` (engine merged 2026-08-10).
 
-## Purpose
+**Not canonical for:** coins, ravewear, auto — those stay in their labs.
 
-**Employment and service lane** — systematic travel deal research, comparison, and portfolio-ready recommendations.
-
-## Provenance
-
-- **Created**: 2026-08-05
-- **Status**: FOUNDATION
-- **Confidence**: 0.70
-
-## Canonical Status
-
-This repository is a specialist component in the Mermicorn Grove.
+**Public claim:** trip clarity + freemium research tool, not a travel agency.
