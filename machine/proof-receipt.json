@@ -1,12 +1,19 @@
 {
-  "repository": "cherry-travel-deal-lab",
-  "source_sha": "PLACEHOLDER",
-  "proof_id": "local-001",
-  "environment": {"python": "3.11+", "os": "linux"},
-  "tests": {
-    "unit": {"count": 3, "passed": 3, "failed": 0},
-    "adversarial": {"count": 2, "passed": 2, "failed": 0}
-  },
-  "result": "PASS",
-  "timestamp": "2026-08-08T00:00:00Z"
+  "repository": "cyber-lazer-mermicorn/cherry-travel-deal-lab",
+  "source_sha": "pending_push",
+  "proof_id": "merge-vertical-slice-2026-08-10",
+  "environment": {"local": true, "vercel_production": false},
+  "tests": [
+    {"name": "api_health", "result": "PASS", "detail": "local TestClient 200"},
+    {"name": "api_plan_HNL_TYO_2500", "result": "PASS", "detail": "packages + money summary"}
+  ],
+  "adversarial_tests": [],
+  "runtime": {"observed": false, "url": null},
+  "result": "PARTIAL",
+  "limitations": [
+    "Production runtime not yet observed on Vercel",
+    "Sample/fallback inventory — not live OTA rates",
+    "Payment capture not wired"
+  ],
+  "timestamp": "2026-08-10T03:25:00Z"
 }

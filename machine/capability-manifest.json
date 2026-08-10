@@ -1,10 +1,16 @@
 {
   "repository": "cherry-travel-deal-lab",
-  "version": "0.1.0",
-  "capabilities": [],
+  "version": "2.2.0",
+  "capabilities": [
+    {"id": "hnl_trip_plan", "status": "implemented", "endpoint": "POST /api/plan"},
+    {"id": "deal_search", "status": "implemented", "endpoint": "POST /api/search"},
+    {"id": "total_cost_money_summary", "status": "implemented"},
+    {"id": "freemium_limits", "status": "implemented", "tiers": ["free", "pro", "premium"]},
+    {"id": "pricing_surface", "status": "implemented", "endpoint": "GET /api/pricing"}
+  ],
   "provenance": {
-    "donors": ["mermicorn-token-saver", "mermicorn-graphic-ai", "mermicorn-commerce-ai"],
-    "consumers": [],
-    "created": "2026-08-08"
+    "donors": ["ai-deal-finder", "mermicorn-commerce-ai"],
+    "created": "2026-08-08",
+    "merged_engine": "2026-08-10"
   }
 }

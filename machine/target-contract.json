@@ -1,26 +1,37 @@
 {
   "identity": {
     "repository_id": "cherry-travel-deal-lab",
-    "display_name": "cherry-travel-deal-lab",
+    "display_name": "Cherry Travel Deal Lab",
     "owner": "cherry",
     "lane": "ventures",
     "visibility": "public",
-    "status": "foundation"
+    "canonical_product": true
   },
   "current": {
-    "state": "SEEDED",
-    "implemented": false,
-    "tested": false,
-    "deployed": false
+    "state": "VERTICAL_SLICE",
+    "implemented": true,
+    "tested": true,
+    "deployed": false,
+    "money_captured": false,
+    "excellence": false
   },
   "target": {
-    "purpose": "[To be defined]",
-    "central_bottleneck": "[To be identified]"
+    "purpose": "Honolulu-origin total-cost trip clarity: ranked packages, budget fit, freemium access.",
+    "central_bottleneck": "Travelers from HNL cannot quickly see true all-in cost and budget headroom across options.",
+    "monetary_unit": "Subscription quotas for plans/searches (Free / Pro $9.99 / Premium $19.99)."
   },
-  "invariants": [],
+  "invariants": [
+    "Default origin is HNL",
+    "Every plan returns total, all-in estimate, and budget headroom when budget > 0",
+    "Free tier enforces daily plan and search limits",
+    "Does not book tickets or claim agency status",
+    "ai-deal-finder is donor engine; this repo is the canonical public product"
+  ],
   "promotion": {
-    "required_tests": ["unit", "adversarial"],
+    "required_tests": ["unit", "api_engine", "adversarial"],
     "require_exact_source_sha": true,
-    "require_receipt": true
+    "require_receipt": true,
+    "require_runtime_health": true,
+    "require_nonclaims": true
   }
 }

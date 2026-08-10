@@ -2,22 +2,34 @@
   "repository": "cherry-travel-deal-lab",
   "lineage": {
     "family": "mermicorn-ventures",
+    "role": "CANONICAL_SYSTEM",
     "parents": [],
     "donors": [
-      {"repository": "mermicorn-token-saver", "contribution": "token-efficiency"},
-      {"repository": "mermicorn-graphic-ai", "contribution": "visual-system"},
-      {"repository": "mermicorn-commerce-ai", "contribution": "commerce-engine"}
+      {
+        "repository": "cyber-lazer-mermicorn/ai-deal-finder",
+        "contribution": "FastAPI plan/search/freemium engine (merged 2026-08-10)",
+        "sha_at_merge": "01fe10f1ca3d9fb76d9ebca7b7b03e5324f83bdb"
+      },
+      {
+        "repository": "mermicorn-commerce-ai",
+        "contribution": "commerce packaging patterns"
+      },
+      {
+        "repository": "mermicorn-token-saver",
+        "contribution": "token-efficiency"
+      }
     ],
     "consumers": []
   },
   "lifecycle": {
     "created": "2026-08-08",
     "identity_resolved": "2026-08-08",
-    "problem_verified": "2026-08-08",
-    "target_contracted": "2026-08-08",
-    "seeded": "2026-08-08",
-    "vertical_slice": "2026-08-08",
-    "implemented": "2026-08-08",
-    "tested": "2026-08-08"
+    "problem_verified": "2026-08-09",
+    "target_contracted": "2026-08-10",
+    "vertical_slice": "2026-08-10",
+    "implemented": "2026-08-10",
+    "tested_local": "2026-08-10",
+    "runtime_observed": null,
+    "excellence": null
   }
 }
