@@ -1,6 +1,6 @@
 {
   "repository": "cyber-lazer-mermicorn/cherry-travel-deal-lab",
-  "source_sha": "pending_push",
+  "source_sha": "a7090c3f481679d2d6de9d8dd0ef70527b99120a",
   "proof_id": "merge-vertical-slice-2026-08-10",
   "environment": {"local": true, "vercel_production": false},
   "tests": [
@@ -12,8 +12,13 @@
   "result": "PARTIAL",
   "limitations": [
     "Production runtime not yet observed on Vercel",
-    "Sample/fallback inventory — not live OTA rates",
+    "Sample inventory — not live OTA rates",
     "Payment capture not wired"
   ],
-  "timestamp": "2026-08-10T03:25:00Z"
+  "timestamp": "2026-08-10T03:40:00Z",
+  "merge": {
+    "donor": "cyber-lazer-mermicorn/ai-deal-finder",
+    "donor_sha": "01fe10f1ca3d9fb76d9ebca7b7b03e5324f83bdb",
+    "canonical_product": "cherry-travel-deal-lab"
+  }
 }

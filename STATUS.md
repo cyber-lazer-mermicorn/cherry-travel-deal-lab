@@ -1,27 +1,26 @@
 # Status
 
-**State:** VERTICAL_SLICE (local proven)  
-**Last updated:** 2026-08-10
+**State:** VERTICAL_SLICE (merged engine on main)  
+**Last updated:** 2026-08-10  
+**HEAD:** `a7090c3`
 
 ## Gates
 
 | Gate | State |
 |------|--------|
 | IDENTITY_RESOLVED | PASS |
-| PROBLEM_VERIFIED | PASS (HNL total-cost clarity) |
-| TARGET_CONTRACT_FROZEN | PASS — see machine/target-contract.json |
-| VERTICAL_SLICE_ALIVE | PASS (local) |
-| DETERMINISTIC_PROOF | PASS local health + plan |
-| RUNTIME_OBSERVED | **OPEN** — needs Git→Vercel healthy deploy |
+| PROBLEM_VERIFIED | PASS |
+| TARGET_CONTRACT_FROZEN | PASS |
+| NOVELTY_AND_LINEAGE | PASS — ai-deal-finder is donor |
+| VERTICAL_SLICE_ALIVE | PASS local |
+| DETERMINISTIC_PROOF | PASS local |
+| RUNTIME_OBSERVED | **OPEN** |
 | EXCELLENCE | **OPEN** |
 
-## Merge
+## Merge complete on GitHub
 
-Engine from `ai-deal-finder` @ `01fe10f` merged into this repo as canonical product surface.
+Engine from `ai-deal-finder` is on this repo: `main.py`, `api/`, `src/{planner,scorer,searcher,users}.py`, `vercel.json`.
 
-## Next
+## Blocker for excellence
 
-1. Confirm Vercel is linked to this repo
-2. Deploy main → production
-3. Prove GET /api/health and POST /api/plan on live URL
-4. Bind proof receipt to production SHA
+Git→Vercel must deploy this repo and return live health + plan. Then RUNTIME_OBSERVED flips and excellence can be claimed under the contract.
