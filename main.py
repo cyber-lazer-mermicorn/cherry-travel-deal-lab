@@ -1,4 +1,4 @@
-"""Cherry Travel Deal Lab v2.2 — HNL trip planner, total-cost packages, freemium."""
+"""Cherry Travel Deal Lab v2.2.1 — HNL trip planner, total-cost packages, freemium."""
 from __future__ import annotations
 import time
 from pathlib import Path
@@ -14,32 +14,57 @@ from src.users import TIERS, UserManager
 
 ROOT = Path(__file__).resolve().parent
 STATIC = ROOT / "static"
-MINIMAL_HTML = """<!DOCTYPE html><html><head><meta charset=utf-8><title>Cherry Travel Deal Lab</title>
-<style>body{font-family:system-ui;background:#0a0a0f;color:#eee;margin:0;padding:24px}
-input,button{padding:10px;margin:4px;border-radius:8px;border:1px solid #333;background:#111;color:#fff}
-button{background:linear-gradient(135deg,#7b2ff7,#00d4ff);border:0;font-weight:600}
+MINIMAL_HTML = """<!DOCTYPE html><html><head><meta charset=utf-8><meta name=viewport content=\"width=device-width,initial-scale=1\">
+<title>Cherry Travel Deal Lab</title>
+<style>
+*{box-sizing:border-box}body{font-family:system-ui,sans-serif;background:#0a0a0f;color:#eee;margin:0;padding:24px;max-width:720px;margin-inline:auto}
+h1{background:linear-gradient(90deg,#00d4ff,#7b2ff7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin:0 0 8px}
+.muted{color:#888;font-size:.9rem}
 .card{background:#12121a;border:1px solid #2a2a3a;border-radius:12px;padding:16px;margin:12px 0}
-.price{color:#00d4ff;font-size:1.3rem;font-weight:700}.muted{color:#888}</style></head><body>
-<h1>Cherry Travel Deal Lab</h1><p class=muted>HNL total-cost trip briefs · freemium</p>
+label{display:block;font-size:.75rem;color:#888;margin:8px 0 4px}
+input{width:100%;padding:12px;border-radius:8px;border:1px solid #333;background:#111;color:#fff}
+.row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+button{margin-top:12px;padding:12px 18px;border-radius:10px;border:0;font-weight:600;cursor:pointer;background:linear-gradient(135deg,#7b2ff7,#00d4ff);color:#fff}
+.price{color:#00d4ff;font-size:1.4rem;font-weight:700}
+.tag{font-size:.7rem;color:#7b2ff7;text-transform:uppercase;letter-spacing:1px}
+</style></head><body>
+<h1>Cherry Travel Deal Lab</h1>
+<p class=muted>Honolulu-origin total-cost trip briefs · not bare fares · freemium</p>
 <div class=card>
-<label>Destination <input id=dest value=TYO></label>
-<label>Budget <input id=budget type=number value=2500></label>
-<label>Nights <input id=nights type=number value=5></label>
-<button onclick=\"run()\">Plan trip</button></div><div id=out></div>
+<div class=row>
+<div><label>Destination</label><input id=dest value=TYO placeholder=TYO></div>
+<div><label>Budget USD</label><input id=budget type=number value=2500></div>
+<div><label>Nights</label><input id=nights type=number value=5 min=1 max=30></div>
+</div>
+<button onclick=\"run()\">Plan trip from HNL</button>
+</div>
+<div id=out></div>
 <script>
 async function run(){
- const body={destination:dest.value,budget:+budget.value,nights:+nights.value,origin:'HNL',travelers:1};
+ const body={destination:dest.value.trim()||'TYO',budget:+budget.value||0,nights:+nights.value||5,origin:'HNL',travelers:1};
+ out.innerHTML='<p class=muted>Planning…</p>';
  const r=await fetch('/api/plan',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
  const j=await r.json();
- if(!r.ok){out.innerHTML='<p>'+(j.detail||r.status)+'</p>';return;}
+ if(!r.ok){out.innerHTML='<div class=card>'+(j.detail||r.status)+'</div>';return;}
  const m=j.money||{};
- let h=`<div class=card><div class=price>$${m.best_total||'—'}</div><p class=muted>all-in ~$${m.best_all_in||'—'} · headroom $${m.headroom??'—'} · ${m.tip||''}</p></div>`;
- (j.packages||[]).forEach(p=>{h+=`<div class=card><b>$${p.total}</b> · ${p.label}<br><span class=muted>${(p.flight||{}).title||''} + ${(p.hotel||{}).title||''}</span></div>`;});
+ let h=`<div class=card><div class=tag>Money</div><div class=price>$${m.best_total??'—'}</div>
+ <p class=muted>all-in ~$${m.best_all_in??'—'} · headroom $${m.headroom??'—'} · ${j.origin}→${j.destination} · ${j.nights}n</p>
+ <p class=muted>${m.tip||''}</p></div>`;
+ (j.packages||[]).forEach(p=>{
+  const sc=p.score||{};
+  h+=`<div class=card><div class=tag>${p.label||'package'}</div><div class=price>$${p.total}</div>
+  <p class=muted>${(p.flight||{}).title||''} + ${(p.hotel||{}).title||''}</p>
+  <p class=muted>score ${sc.score??'—'}/100 ${sc.verdict||''} · ${p.fits_budget?'fits budget':'over budget'}</p></div>`;
+ });
  out.innerHTML=h;
 }
 </script></body></html>"""
 
-app = FastAPI(title="Cherry Travel Deal Lab", description="Honolulu-origin trip briefs, total-cost packages, freemium", version="2.2.0")
+app = FastAPI(
+    title="Cherry Travel Deal Lab",
+    description="Honolulu-origin total-cost trip briefs, ranked packages, freemium",
+    version="2.2.1",
+)
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_methods=["*"], allow_headers=["*"])
 scorer = DealScorer()
 searcher = DealSearcher()
@@ -79,11 +104,33 @@ async def root():
 
 @app.get("/api/health")
 async def health():
-    return {"status": "healthy", "version": "2.2.0", "ai_providers": len(scorer.active_providers), "default_origin": "HNL", "features": ["search", "plan", "packages", "total_cost", "freemium", "budget_fit"], "product": "cherry-travel-deal-lab"}
+    return {
+        "status": "healthy",
+        "version": "2.2.1",
+        "product": "cherry-travel-deal-lab",
+        "default_origin": "HNL",
+        "ai_providers": len(scorer.active_providers),
+        "features": ["search", "plan", "packages", "total_cost", "freemium", "budget_fit", "pricing"],
+    }
 
 @app.get("/api/pricing")
 async def pricing():
-    return {"currency": "USD", "tiers": TIERS, "positioning": "Sell trip clarity: total cost from Honolulu, ranked packages, budget fit.", "value_props": ["True total-cost (flight + hotel + buffer)", "HNL-origin packages", "Budget headroom", "Freemium upgrade path"]}
+    return {
+        "currency": "USD",
+        "tiers": TIERS,
+        "positioning": "Sell trip clarity: total cost from Honolulu, ranked packages, budget fit.",
+        "value_props": [
+            "True total-cost (flight + hotel + buffer)",
+            "HNL-origin packages",
+            "Budget headroom math",
+            "Freemium upgrade path",
+        ],
+        "non_claims": [
+            "Does not book tickets",
+            "Sample inventory until live providers are connected",
+            "Not a licensed travel agency",
+        ],
+    }
 
 @app.post("/api/search")
 async def search_deals(req: SearchRequest):
@@ -93,16 +140,21 @@ async def search_deals(req: SearchRequest):
             raise HTTPException(429, "Daily search limit reached. Upgrade to Pro for more.")
     start = time.time()
     origin = (req.origin or "HNL").upper()
-    deals = searcher.search_flights(req.destination, req.budget, origin)
-    deals += searcher.search_hotels(req.destination, req.budget)
-    scored = [{"deal": deal.to_dict(), "score": scorer.score(deal, req.budget).to_dict()} for deal in deals]
+    deals = searcher.search(req.destination, req.budget, origin)
+    scored = [{"deal": d.to_dict(), "score": scorer.score(d, req.budget).to_dict()} for d in deals]
     scored.sort(key=lambda x: x["score"]["score"], reverse=True)
     if req.user_id:
         user = users.get(req.user_id)
         if user:
             user.use_search()
             users._save()
-    return {"deals": scored, "count": len(scored), "destination": req.destination, "origin": origin, "latency_ms": round((time.time() - start) * 1000, 1)}
+    return {
+        "deals": scored,
+        "count": len(scored),
+        "destination": req.destination,
+        "origin": origin,
+        "latency_ms": round((time.time() - start) * 1000, 1),
+    }
 
 @app.post("/api/plan")
 async def plan_trip(req: PlanRequest):
@@ -111,7 +163,14 @@ async def plan_trip(req: PlanRequest):
         if user and not user.can_plan():
             raise HTTPException(429, "Daily plan limit reached. Upgrade to Pro for more plans.")
     start = time.time()
-    plan = planner.plan(destination=req.destination, budget=req.budget, origin=req.origin or "HNL", nights=req.nights, travelers=req.travelers, include_activities=req.include_activities)
+    plan = planner.plan(
+        destination=req.destination,
+        budget=req.budget,
+        origin=req.origin or "HNL",
+        nights=req.nights,
+        travelers=req.travelers,
+        include_activities=req.include_activities,
+    )
     if req.user_id:
         user = users.get(req.user_id)
         if user:
