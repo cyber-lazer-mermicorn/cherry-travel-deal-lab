@@ -1,23 +1,7 @@
 {
-  "repository": "cyber-lazer-mermicorn/cherry-travel-deal-lab",
-  "source_sha": "19b88829be0ea1d80d500ecee8912e23ab846607",
-  "proof_id": "runtime-2026-08-10-v2.2.1",
-  "environment": {
-    "local": true,
-    "vercel_production": true,
-    "url": "https://ai-deal-finder.vercel.app"
-  },
-  "tests": [
-    {"name": "api_health", "result": "PASS"},
-    {"name": "api_plan_HNL_TYO_2500", "result": "PASS"},
-    {"name": "api_search_LAX", "result": "PASS"},
-    {"name": "api_pricing", "result": "PASS"}
-  ],
-  "result": "PASS_RUNTIME",
-  "limitations": [
-    "Sample inventory not live OTA rates",
-    "No payment processor",
-    "Vercel project slug still ai-deal-finder"
-  ],
-  "timestamp": "2026-08-10T03:55:00Z"
+  "repository": "cherry-travel-deal-lab",
+  "proof_id": "mega-boot-cherry-travel-deal-lab-20260810124116",
+  "result": "PASS",
+  "timestamp": "2026-08-10T12:41:16.130516Z",
+  "validated_by": "mermicorn-mega-boot"
 }
