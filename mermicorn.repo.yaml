@@ -3,7 +3,7 @@ schema_version: "1.0"
 id: cherry-travel-deal-lab
 display_name: Cherry Travel Deal Lab
 owner: cherry
-lane: commerce-service
+lane: commerce
 visibility: public
 status: foundation
 
